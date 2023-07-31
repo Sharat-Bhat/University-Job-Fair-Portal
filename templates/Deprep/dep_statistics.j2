@@ -1,0 +1,38 @@
+{% extends 'base.j2' %}
+{% block content %}
+
+<div style="height:100vh;" id="chart_div"></div>
+
+{% block javascript %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawBasic);
+
+function drawBasic() {
+
+     var data = google.visualization.arrayToDataTable([
+        ["Element", "Number of Students", { role: "style" } ],
+        ["Students Placed", {{ dep.students_placed }}, 'color: #79FF4D'],
+        ["Students Shortlisted", {{ dep.students_shortlisted }}, 'color: #FFFF4D'],
+        ['Total Students', {{ dep.total_students }},  'color: #66B3FF']
+      ]);
+
+      var options = {
+        title: 'Placement Statistics',
+        legend: {position:'none'},
+        vAxis: { ticks: [
+          {% for i in range(0, dep.total_students+2) %}{{ i }},{% endfor %}
+          ] }
+      };
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+}
+</script>
+{% endblock %}
+
+{% endblock %}
+
